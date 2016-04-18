@@ -21,6 +21,11 @@ public class StringAccumulator {
 	 * with //<delim>\n at the start of the input. 
 	 * Example:
 	 * '//;\n5;7 -> returns 12
+	 * '//aaa\n5aaa7 -> returns 12
+	 * 
+	 * The dynamic delimiter may contain several alternatives, separated by '|' (or)
+	 * Example:
+	 * '//aaa|bbb\n5aaa7bbb5 -> returns 17
 	 * 
 	 * Negative numbers are not allowed. An exception is thrown.
 	 * 
@@ -39,7 +44,10 @@ public class StringAccumulator {
 			if (input.startsWith("//") && input.indexOf("\n") > 0) {
 				String dynamicDelimiter = input.substring(2, input.indexOf("\n"));
 				input = input.substring(input.indexOf("\n"));
-				delimiters.add(dynamicDelimiter);
+				String[] dynamicDelimiters = dynamicDelimiter.split("\\|");
+				for (int i = 0; i < dynamicDelimiters.length; i++) {
+					delimiters.add(dynamicDelimiters[i]);
+				}
 			}
 			result = parseAndAddNumbers(delimiters.get(0), replaceAll(input, delimiters, delimiters.get(0)));
 		}

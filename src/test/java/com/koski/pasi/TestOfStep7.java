@@ -12,6 +12,11 @@ public class TestOfStep7 {
 	}
 	
 	@Test
+	public void testMultiCharDelimiter() throws Exception {
+		assertEquals(12, new StringAccumulator().add("//aaa\n5aaa7"));
+	}
+	
+	@Test
 	public void testMultiCharDelimiterWithSpecialCharactersAndNonDynamicDelimiters() throws Exception {
 		assertEquals(11, new StringAccumulator().add("//+++\n1+++2,3\n5"));
 	}
