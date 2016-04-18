@@ -1,5 +1,7 @@
 package com.koski.pasi;
 
+import java.util.ArrayList;
+
 /**
  * StringAccumulator is a calculator operating on String input.
  * @author koskipas
@@ -20,12 +22,21 @@ public class StringAccumulator {
 		int result = 0;
 
 		if (input != null && !input.isEmpty()) {
-			String[] delimiters = {",", "\n"};
-			result = parseAndAddNumbers(delimiters[0], replaceAll(input, delimiters, delimiters[0]));
+			ArrayList<String> delimiters = new ArrayList<String>();
+			delimiters.add(",");
+			delimiters.add("\n");
+			if (input.startsWith("//") && input.indexOf("\n") > 0) {
+				String dynamicDelimiter = input.substring(2, input.indexOf("\n"));
+				input = input.substring(input.indexOf("\n"));
+				delimiters.add(dynamicDelimiter);
+			}
+			result = parseAndAddNumbers(delimiters.get(0), replaceAll(input, delimiters, delimiters.get(0)));
 		}
 		
 		return result;
 	}
+	
+	
 	
 	/**
 	 * Parse String input which contains integer numbers to be added to the
@@ -68,11 +79,11 @@ public class StringAccumulator {
 	 * @param input
 	 * @return
 	 */
-	private String replaceAll(final String input, final String[] stringToReplace, final String replaceWithString) {
+	private String replaceAll(final String input, final ArrayList<String> stringsToReplace, final String replaceWithString) {
 		
 		String inputWithReducedDelimiters = input;
-		for (int i = 1; i < stringToReplace.length; i++) {
-			inputWithReducedDelimiters = inputWithReducedDelimiters.replaceAll(stringToReplace[i], replaceWithString);
+		for (String stringToReplace : stringsToReplace) {
+			inputWithReducedDelimiters = inputWithReducedDelimiters.replaceAll(stringToReplace, replaceWithString);
 			
 		}
 		return inputWithReducedDelimiters;
