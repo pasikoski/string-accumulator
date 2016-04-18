@@ -1,6 +1,7 @@
 package com.koski.pasi;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 /**
  * StringAccumulator is a calculator operating on String input.
@@ -108,9 +109,15 @@ public class StringAccumulator {
 		
 		String inputWithReducedDelimiters = input;
 		for (String stringToReplace : stringsToReplace) {
-			inputWithReducedDelimiters = inputWithReducedDelimiters.replaceAll(stringToReplace, replaceWithString);
+			inputWithReducedDelimiters = inputWithReducedDelimiters.replaceAll(escapeRegex(stringToReplace), replaceWithString);
 			
 		}
 		return inputWithReducedDelimiters;
+	}
+	
+	
+	private String escapeRegex(String regex) {
+		Pattern SPECIAL_REGEX_CHARS = Pattern.compile("[{}()\\[\\].+*?^$\\\\|]");
+		return SPECIAL_REGEX_CHARS.matcher(regex).replaceAll("\\\\$0");
 	}
 }
