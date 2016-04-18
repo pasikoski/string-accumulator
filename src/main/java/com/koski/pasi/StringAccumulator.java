@@ -15,10 +15,18 @@ public class StringAccumulator {
 	 * Examples 
 	 * input "5,7" -> returns 12
 	 * input "5\n7,5" -> returns 17
+	 * 
+	 * Input may also declare a dynamic delimiter by specifying the delimiter
+	 * with //<delim>\n at the start of the input. 
+	 * Example:
+	 * '//;\n5;7 -> returns 12
+	 * 
+	 * Negative numbers are not allowed. An exception is thrown.
+	 * 
 	 * @param input
 	 * @return
 	 */
-	public int add(String input) {
+	public int add(String input) throws Exception {
 		int result = 0;
 
 		if (input != null && !input.isEmpty()) {
@@ -42,6 +50,9 @@ public class StringAccumulator {
 	 * Parse String input which contains integer numbers to be added to the
 	 * resulting sum. Numbers are separated by delimiter.
 	 * 
+	 * Negative numbers aren't allowed. An Exception is thrown if negative
+	 * numbers are found.
+	 * 
 	 * Example 
 	 * delimiter="," and input="5,7" -> returns 12
 	 * 
@@ -54,18 +65,27 @@ public class StringAccumulator {
 	 * @param input
 	 * @return
 	 */
-	private int parseAndAddNumbers(String delimiter, final String input) {
+	private int parseAndAddNumbers(String delimiter, final String input) throws Exception {
 		int result = 0;
+		ArrayList<Integer> negativeNumbers = new ArrayList<Integer>();
 		if (input != null && !input.isEmpty()) {
 			String[] items = input.split(delimiter);
 			for (int i = 0; i < items.length; i++) {
 				try {
+					int value = Integer.parseInt(items[i]);
+					if (value < 0) {
+						negativeNumbers.add(value);
+					}
 					result += Integer.parseInt(items[i]);
 				}
 				catch (NumberFormatException nfe) {
 					//Do nothing -> invalid number is ignored
 				}
 			}
+		}
+		
+		if (negativeNumbers.size() > 0) {
+			throw new Exception("Negatives not allowed: " + negativeNumbers.toString());
 		}
 		
 		return result;
