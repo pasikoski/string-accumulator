@@ -23,6 +23,8 @@ public class StringAccumulator {
 	 * 
 	 * Negative numbers are not allowed. An exception is thrown.
 	 * 
+	 * Non-numbers, empty values, or numbers greater than 1000 are skipped.
+	 * 
 	 * @param input
 	 * @return
 	 */
@@ -56,10 +58,11 @@ public class StringAccumulator {
 	 * Example 
 	 * delimiter="," and input="5,7" -> returns 12
 	 * 
-	 * Any non-numbers or empty values are skipped, no Exception is thrown.
+	 * Non-numbers, empty values, or numbers greater than 1000 are skipped, no Exception is thrown.
 	 * Example
 	 * delimiter="," and input="5,A,B,C,7" -> returns 12
 	 * delimiter="," and input="5,A,,,C,7" -> returns 12
+	 * delimiter="," and input="5,A,1001,C,7" -> returns 12
 	 * 
 	 * @param delimiter
 	 * @param input
@@ -76,7 +79,9 @@ public class StringAccumulator {
 					if (value < 0) {
 						negativeNumbers.add(value);
 					}
-					result += Integer.parseInt(items[i]);
+					else if (value < 1001) {
+						result += value;
+					}
 				}
 				catch (NumberFormatException nfe) {
 					//Do nothing -> invalid number is ignored
